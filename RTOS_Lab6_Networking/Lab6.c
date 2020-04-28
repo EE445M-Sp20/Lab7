@@ -528,5 +528,5 @@ int ClientTest(void){
 
 //*******************Trampoline for selecting main to execute**********
 int main(void) { 			// main
-  Testmain3();
+  ServerTest();
 }

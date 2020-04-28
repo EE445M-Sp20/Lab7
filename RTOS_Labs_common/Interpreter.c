@@ -45,14 +45,14 @@
 #define LOAD_ELF        "load"
 
 
-#define RPC_ADC_IN "radcin"
-#define RPC_OS_Time     "rOS_Time"
-#define RPC_ST7735_Message "rST7735_Message"
-#define RPC_eFile_format   "reFile_format"
-#define RPC_eFile_create   "reFile_create"
-#define RPC_eFile_read   "reFile_read"
-#define RPC_eFile_write   "reFile_write"
-#define RPC_exec_elf     "r_exec_elf"
+#define RPC_ADC_IN "0"
+#define RPC_OS_Time     "1"
+#define RPC_ST7735_Message "2"
+#define RPC_eFile_format   "3"
+#define RPC_eFile_create   "4"
+#define RPC_eFile_read   "5"
+#define RPC_eFile_write   "6"
+#define RPC_exec_elf     "7"
 
 #define RPC_CLIENT_RECEIVE "rpc_client_receive"
 
@@ -171,7 +171,6 @@ void decode_exec(char (*tokens)[MAXIMUM_COMMAND_WORD_LENGTH]){
 }
 
 if(strCmp(tokens[0], "cls")==0){
-	//Output_Clear();
 }
 
 if(strCmp(tokens[0], START_TIMER)==0){
@@ -191,7 +190,6 @@ if(strCmp(tokens[0], ADC_INIT)==0){
 }
 
 if(strCmp(tokens[0], ADCIN)==0){
-	//Output_Clear();
 	ST7735_Message(0, 0, "adc_IN =", ADC0_InSeq3());
 }
 
@@ -211,7 +209,6 @@ ELFEnv_t env = { symtab, 1 };
 }
 
 if(strCmp(tokens[0], EN_DN_STATS)==0){
-	//Jitter(MaxJitter, JitterSize, JitterHistogram);
 	UART_OutString("Disabled millisecs: ");
 	UART_OutUDec(Disabled/80000);
 	UART_OutString("\n\r");
@@ -223,15 +220,11 @@ if(strCmp(tokens[0], EN_DN_STATS)==0){
 }
 
 if(strCmp(tokens[0], CPU_UTIL)==0){
-	//Jitter(MaxJitter, JitterSize, JitterHistogram);
-		//UART_OutUDec(CPUUtil);
 	UART_OutString("\n\r");
 }
 
 
 if(strCmp(tokens[0], FORMAT_FILESYSTEM)==0){
-	//Jitter(MaxJitter, JitterSize, JitterHistogram);
-		//UART_OutUDec(CPUUtil);
 	eFile_Mount();
 	eFile_Init();
 	eFile_Format();
@@ -239,8 +232,6 @@ if(strCmp(tokens[0], FORMAT_FILESYSTEM)==0){
 }
 
 if(strCmp(tokens[0], PRINT_DIRECTORY)==0){
-	//Jitter(MaxJitter, JitterSize, JitterHistogram);
-		//UART_OutUDec(CPUUtil);
 	eFile_DOpen("");
 	char *name;
 	unsigned long size;
@@ -261,8 +252,6 @@ if(strCmp(tokens[0], PRINT_DIRECTORY)==0){
 }
 
 if(strCmp(tokens[0], CREATE_FILE)==0){
-	//Jitter(MaxJitter, JitterSize, JitterHistogram);
-		//UART_OutUDec(CPUUtil);
 	int i=0;
 	while(tokens[1][i] !=0){
 		i++;
@@ -280,8 +269,6 @@ if(strCmp(tokens[0], CREATE_FILE)==0){
 }
 
 if(strCmp(tokens[0], WRITE_TO_FILE)==0){
-	//Jitter(MaxJitter, JitterSize, JitterHistogram);
-		//UART_OutUDec(CPUUtil);
 		int i=0;
 	while(tokens[1][i] !=0){
 		i++;
@@ -307,8 +294,6 @@ if(strCmp(tokens[0], WRITE_TO_FILE)==0){
 }
 
 if(strCmp(tokens[0], PRINT_FILE)==0){
-	//Jitter(MaxJitter, JitterSize, JitterHistogram);
-		//UART_OutUDec(CPUUtil);
 			int i=0;
 	while(tokens[1][i] !=0){
 		i++;
@@ -332,8 +317,6 @@ if(strCmp(tokens[0], PRINT_FILE)==0){
 }
 
 if(strCmp(tokens[0], DELETE_FILE)==0){
-	//Jitter(MaxJitter, JitterSize, JitterHistogram);
-		//UART_OutUDec(CPUUtil);
 	int res = eFile_Delete(tokens[1]);
 	if(res){
 	 UART_OutString("Delete failed\n\r");
@@ -343,9 +326,6 @@ if(strCmp(tokens[0], DELETE_FILE)==0){
 	}
 	UART_OutString("\n\r");
 }
-
-//ESP8266_Send(const char* fetch)
-//ESP8266_Receive(char* fetch, uint32_t max)
 
 if(strCmp(tokens[0], RPC_ADC_IN)==0){
 	const char* adc = "adcin";
@@ -383,7 +363,7 @@ if(strCmp(tokens[0], RPC_ST7735_Message)==0){
 		ctr++;
 		i++;
 	}
-	transmit_message[ctr]=0;
+	transmit_message[ctr]=' ';
 	ctr++;
 	i=0;
 	while(tokens[2][i] != 0){
@@ -391,23 +371,90 @@ if(strCmp(tokens[0], RPC_ST7735_Message)==0){
 		ctr++;
 		i++;
 	}
-	transmit_message[ctr]=0;
-	ctr++;
-	i=0;
-	while(tokens[2][i] != 0){
-		transmit_message[ctr] = tokens[2][i];
-		ctr++;
-		i++;
-	}
-	transmit_message[ctr]=0;
+	transmit_message[ctr]=' ';
 	ctr++;
 	i=0;
 	while(tokens[3][i] != 0){
+		transmit_message[ctr] = tokens[2][i];
+		ctr++;
+		i++;
+	}
+	transmit_message[ctr]=' ';
+	ctr++;
+	i=0;
+	while(tokens[4][i] != 0){
 		transmit_message[ctr] = tokens[3][i];
 		ctr++;
 		i++;
 	}
 	transmit_message[ctr]=0;
+	transmit_message[ctr]=0;
+	ctr++;
+	ESP8266_Send(transmit_message);	
+	
+}
+
+if(strCmp(tokens[0], RPC_eFile_format)==0){
+
+}
+
+
+
+if(strCmp(tokens[0], RPC_eFile_create)==0){
+	char transmit_message[100];
+	transmit_message[0]='4';
+	transmit_message[1]=' ';
+	int ctr=2;
+	int i=0;
+	while(tokens[1][i] != 0){
+		transmit_message[ctr] = tokens[1][i];
+		ctr++;
+		i++;
+	}
+	transmit_message[ctr]=0;
+	ctr++;
+	ESP8266_Send(transmit_message);	
+	
+}
+
+if(strCmp(tokens[0], RPC_eFile_write)==0){
+	char transmit_message[100];
+	transmit_message[0]='6';
+	transmit_message[1]=' ';
+	int ctr=2;
+	int i=0;
+	while(tokens[1][i] != 0){
+		transmit_message[ctr] = tokens[1][i];
+		ctr++;
+		i++;
+	}
+	transmit_message[ctr]=' ';
+	ctr++;
+	i=0;
+	while(tokens[2][i] != 0){
+		transmit_message[ctr] = tokens[2][i];
+		ctr++;
+		i++;
+	}
+	transmit_message[ctr]=0;
+	ctr++;
+	ESP8266_Send(transmit_message);
+}
+
+
+
+if(strCmp(tokens[0], RPC_eFile_read)==0){
+	char transmit_message[100];
+	transmit_message[0]='5';
+	transmit_message[1]=' ';
+	int ctr=2;
+	int i=0;
+	while(tokens[1][i] != 0){
+		transmit_message[ctr] = tokens[1][i];
+		ctr++;
+		i++;
+	}
+	transmit_message[ctr]=' ';
 	ctr++;
 	i=0;
 	while(tokens[2][i] != 0){
@@ -418,11 +465,12 @@ if(strCmp(tokens[0], RPC_ST7735_Message)==0){
 	transmit_message[ctr]=0;
 	ctr++;
 	ESP8266_Send(transmit_message);	
-	
 }
 
+	char ch[100];
+	ESP8266_Receive(ch, 100);
 
-UART_OutString("\n\r");
+UART_OutString(ch);
 
 
 }
@@ -553,23 +601,78 @@ if(strCmp(tokens[0], RPC_ST7735_Message)==0){
 }
 
 if(strCmp(tokens[0], RPC_eFile_format)==0){
-	const char* eff = "eFile_format";
-	ESP8266_Send("3");	
+	eFile_Mount();
+	eFile_Init();
+	eFile_Format();
 }
 
 if(strCmp(tokens[0], RPC_eFile_create)==0){
-	const char* create = "eFile_create";
-	ESP8266_Send("4");
+	int i=0;
+	while(tokens[1][i] !=0){
+		i++;
+	}
+	if(i<=7){
+	int res = eFile_Create(tokens[1]);
+	if(res){
+		UART_OutString("Creation failure \n\r");
+	}
+	else{
+		UART_OutString("Creation success \n\r");
+	}
+	}
+	UART_OutString("\n\r");
 }
 
 if(strCmp(tokens[0], RPC_eFile_read)==0){
-	const char* er = "eFile_read";
-	ESP8266_Send(er);	
+			int i=0;
+	while(tokens[1][i] !=0){
+		i++;
+	}
+	if(i<=7){
+	int res = eFile_ROpen(tokens[1]);
+	if(res){
+		UART_OutString("Open failure \n\r");
+	}
+	else{
+		UART_OutString("Open success \n\r");
+		char ch[100];
+		int i =0;
+		while( eFile_ReadNext(&ch[i])!=1 && i<100){
+			UART_OutChar(ch[i]);
+			i++;
+		}
+		ch[i]=0;
+		ESP8266_Send(ch);
+		eFile_RClose();
+
+	}
+	}
+	UART_OutString("\n\r");
 }
 
 if(strCmp(tokens[0], RPC_eFile_write)==0){
-	const char* ewr = "eFile_write";
-	ESP8266_Send(ewr);	
+		int i=0;
+	while(tokens[1][i] !=0){
+		i++;
+	}
+	if(i<=7){
+	int res = eFile_WOpen(tokens[1]);
+	if(res){
+		UART_OutString("Open failure \n\r");
+	}
+	else{
+		UART_OutString("Open success \n\r");
+		res = eFile_Write(tokens[2][0]);
+			if(res){
+				UART_OutString("Write failure \n\r");
+			}
+			else{
+				UART_OutString("Write success \n\r");
+				res = eFile_WClose();
+			}
+	}
+	}
+	UART_OutString("\n\r");
 }
 
 if(strCmp(tokens[0], RPC_exec_elf)==0){
