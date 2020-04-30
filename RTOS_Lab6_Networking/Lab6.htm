@@ -3,9 +3,9 @@
 <title>Static Call Graph - [.\Lab6.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Lab6.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Apr 29 20:28:56 2020
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Apr 29 22:35:29 2020
 <BR><P>
-<H3>Maximum Stack Usage =       1024 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        920 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 Interpreter &rArr; decode_exec &rArr; exec_elf &rArr; relocateSections &rArr; relocateSection &rArr; relocate &rArr; readSymbol &rArr; readSection &rArr; readSectionName &rArr; LOADER_READ &rArr; f_read &rArr; get_fat &rArr; move_window &rArr; sync_window &rArr; eDisk_Write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 <P>
@@ -137,7 +137,7 @@ Function Pointers
  <LI><a href="#[2c]">SSI1_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
  <LI><a href="#[43]">SSI2_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
  <LI><a href="#[44]">SSI3_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
- <LI><a href="#[86]">ST7735_Message</a> from st7735.o(i.ST7735_Message) referenced from interpreter.o(.constdata)
+ <LI><a href="#[86]">ST7735_Message</a> from st7735.o(i.ST7735_Message) referenced 2 times from interpreter.o(.constdata)
  <LI><a href="#[6]">SVC_Handler</a> from osasm.o(.text) referenced from startup.o(RESET)
  <LI><a href="#[26]">SysCtl_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
  <LI><a href="#[9]">SysTick_Handler</a> from systick.o(.text) referenced from startup.o(RESET)
@@ -1129,7 +1129,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[7f]"></a>Interpreter</STRONG> (Thumb, 46 bytes, Stack size 224 bytes, interpreter.o(i.Interpreter))
-<BR><BR>[Stack]<UL><LI>Max Depth = 1024 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 920 + Unknown Stack Size
 <LI>Call Chain = Interpreter &rArr; decode_exec &rArr; exec_elf &rArr; relocateSections &rArr; relocateSection &rArr; relocate &rArr; readSymbol &rArr; readSection &rArr; readSectionName &rArr; LOADER_READ &rArr; f_read &rArr; get_fat &rArr; move_window &rArr; sync_window &rArr; eDisk_Write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Suspend
@@ -1681,8 +1681,8 @@ Global Symbols
 <LI><a href="#[13a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dir_next
 </UL>
 
-<P><STRONG><a name="[e6]"></a>decode_exec</STRONG> (Thumb, 1896 bytes, Stack size 224 bytes, interpreter.o(i.decode_exec))
-<BR><BR>[Stack]<UL><LI>Max Depth = 800 + Unknown Stack Size
+<P><STRONG><a name="[e6]"></a>decode_exec</STRONG> (Thumb, 1974 bytes, Stack size 120 bytes, interpreter.o(i.decode_exec))
+<BR><BR>[Stack]<UL><LI>Max Depth = 696 + Unknown Stack Size
 <LI>Call Chain = decode_exec &rArr; exec_elf &rArr; relocateSections &rArr; relocateSection &rArr; relocate &rArr; readSymbol &rArr; readSection &rArr; readSectionName &rArr; LOADER_READ &rArr; f_read &rArr; get_fat &rArr; move_window &rArr; sync_window &rArr; eDisk_Write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_WOpen

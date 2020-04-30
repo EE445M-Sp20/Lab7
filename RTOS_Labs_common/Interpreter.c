@@ -449,6 +449,24 @@ if(strCmp(tokens[0], RPC_eFile_write)==0){
 
 
 
+if(strCmp(tokens[0], RPC_exec_elf)==0){
+	char transmit_message[100];
+	transmit_message[0]='7';
+	transmit_message[1]=' ';
+	int ctr=2;
+	int i=0;
+	while(tokens[1][i] != 0){
+		transmit_message[ctr] = tokens[1][i];
+		ctr++;
+		i++;
+	}
+	transmit_message[ctr++]=' ';
+	transmit_message[ctr++]='\r';
+	transmit_message[ctr++]='\n';
+	transmit_message[ctr++]=0;
+	ESP8266_Send(transmit_message);	
+}
+
 if(strCmp(tokens[0], RPC_eFile_read)==0){
 	char transmit_message[100];
 	transmit_message[0]='5';
@@ -460,27 +478,14 @@ if(strCmp(tokens[0], RPC_eFile_read)==0){
 		ctr++;
 		i++;
 	}
-	transmit_message[ctr]=' ';
-	ctr++;
-	i=0;
-	while(tokens[2][i] != 0){
-		transmit_message[ctr] = tokens[2][i];
-		ctr++;
-		i++;
-	}
 	transmit_message[ctr++]=' ';
 	transmit_message[ctr++]='\r';
 	transmit_message[ctr++]='\n';
 	transmit_message[ctr++]=0;
 	ESP8266_Send(transmit_message);	
+
+
 }
-
-	char ch[100];
-	ESP8266_Receive(ch, 100);
-
-UART_OutString(ch);
-
-
 }
 
 
@@ -691,16 +696,27 @@ if(strCmp(tokens[0], RPC_eFile_write)==0){
 	UART_OutString("\n\r");
 }
 
+//if(strCmp(tokens[0], RPC_exec_elf)==0){
+//	const char* adc = "exec_elf ";
+//	const char* arg = tokens[1];
+//	int i = 0;
+//	char transmit[100];
+//	while(tokens[i]!=0){
+//		transmit[9+i]=tokens[1][i];
+//		i++;
+//	}
+//	ESP8266_Send(adc);	
+//}
+
 if(strCmp(tokens[0], RPC_exec_elf)==0){
-	const char* adc = "exec_elf ";
-	const char* arg = tokens[1];
-	int i = 0;
-	char transmit[100];
-	while(tokens[i]!=0){
-		transmit[9+i]=tokens[1][i];
-		i++;
-	}
-	ESP8266_Send(adc);	
+	int mount = eFile_Mount();
+	int open = eFile_ROpen(tokens[1]);
+static const ELFSymbol_t symtab[] = {
+{ "ST7735_Message", ST7735_Message }
+};
+ELFEnv_t env = { symtab, 1 };
+	int result =  exec_elf(tokens[1], &env);
+
 }
 
 if(strCmp(tokens[0], RPC_CLIENT_RECEIVE)==0){

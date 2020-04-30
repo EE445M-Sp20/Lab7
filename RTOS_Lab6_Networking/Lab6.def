@@ -1,4 +1,4 @@
-#<SYMDEFS># ARM Linker, 5060750: Last Updated: Wed Apr 29 20:28:56 2020
+#<SYMDEFS># ARM Linker, 5060750: Last Updated: Wed Apr 29 22:35:29 2020
 0x00000000 N __ARM_use_no_argv
 0x00000000 D __Vectors
 0x00000000 N _printf_a
@@ -210,8 +210,8 @@
 0x00002f2d T __scatterload_copy
 0x00002f3b T __scatterload_null
 0x00002f3d T __scatterload_zeroinit
-0x0000641d T main
-0x00007ddd D ReceiveDataSearchString
+0x00006475 T main
+0x00007e45 D ReceiveDataSearchString
 0x20000000 D IntTerm
 0x20000002 D PrevError
 0x20000004 D NumCreated
