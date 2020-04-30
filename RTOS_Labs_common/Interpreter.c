@@ -53,6 +53,7 @@
 #define RPC_eFile_read   "5"
 #define RPC_eFile_write   "6"
 #define RPC_exec_elf     "7"
+#define RPC_Toggle_led       "8"
 
 #define RPC_CLIENT_RECEIVE "rpc_client_receive"
 
@@ -375,7 +376,7 @@ if(strCmp(tokens[0], RPC_ST7735_Message)==0){
 	ctr++;
 	i=0;
 	while(tokens[3][i] != 0){
-		transmit_message[ctr] = tokens[2][i];
+		transmit_message[ctr] = tokens[3][i];
 		ctr++;
 		i++;
 	}
@@ -383,7 +384,7 @@ if(strCmp(tokens[0], RPC_ST7735_Message)==0){
 	ctr++;
 	i=0;
 	while(tokens[4][i] != 0){
-		transmit_message[ctr] = tokens[3][i];
+		transmit_message[ctr] = tokens[4][i];
 		ctr++;
 		i++;
 	}
@@ -397,7 +398,7 @@ if(strCmp(tokens[0], RPC_ST7735_Message)==0){
 }
 
 if(strCmp(tokens[0], RPC_eFile_format)==0){
-
+ESP8266_Send("3 \r\n");	
 }
 
 
@@ -486,6 +487,11 @@ if(strCmp(tokens[0], RPC_eFile_read)==0){
 
 
 }
+
+if(strCmp(tokens[0], RPC_Toggle_led)==0){
+	ESP8266_Send("8 \r\n");
+}
+
 }
 
 
@@ -592,9 +598,10 @@ void decode_exec_rpc_server(char (*tokens)[MAXIMUM_COMMAND_WORD_LENGTH]){
 if(strCmp(tokens[0], RPC_ADC_IN)==0){
 	//const char* adc = "adcin";
 	char buffer[20];
+	ADC0_InitSWTriggerSeq3_Ch9();
 	uint32_t adc = ADC0_InSeq3();
-	buffer[7]='\r';
-	buffer[8]='\n';
+	buffer[3]='\r';
+	buffer[4]='\n';
 	ESP8266_Send(my_itoa(adc,buffer));   // here 10 means decimal
 	
 }
@@ -724,6 +731,10 @@ if(strCmp(tokens[0], RPC_CLIENT_RECEIVE)==0){
 	ESP8266_Receive(received_buffer, 100);
 	decode_and_transmit(received_buffer);
 }
+
+if(strCmp(tokens[0], RPC_Toggle_led)==0){
+	PF2 ^= 0x04;
+}
 }
 
 
@@ -761,10 +772,10 @@ void ServerRPC(void){
     OS_Kill();
   }  
   ST7735_DrawString(0,2,"Server started",ST7735_GREEN);
-  
+   ESP8266_WaitForConnection();
   while(1) {
     // Wait for connection
-    ESP8266_WaitForConnection();
+   
     
     // Launch thread with higher priority to serve request
     if(OS_AddThread(&RPC_Server,128,1)) {}//NumCreated++;
