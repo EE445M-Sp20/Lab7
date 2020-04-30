@@ -24,8 +24,8 @@ enum Menu_Status {RX=0, TX, CONNECTED};
 //#define SSID_NAME  "YourAP"
 //#define PASSKEY    "YourPassword"
 
-#define SSID_NAME  "LAPTOP-8M5QVTQG 5192"
-#define PASSKEY    "9R0962n)"
+#define SSID_NAME  "Sandeep Wifi"
+#define PASSKEY    "2816608580$$"
 
 /* To get the password for the "utexas-iot" network:
 

@@ -330,7 +330,7 @@ if(strCmp(tokens[0], DELETE_FILE)==0){
 if(strCmp(tokens[0], RPC_ADC_IN)==0){
 	const char* adc = "adcin";
 	
-	ESP8266_Send("0");
+	ESP8266_Send("0 \r\n");
 	char Rec[10];
 	ESP8266_Receive(Rec, 10);
 	UART_OutString("Received ADC ");
@@ -341,7 +341,7 @@ if(strCmp(tokens[0], RPC_ADC_IN)==0){
 if(strCmp(tokens[0], RPC_OS_Time)==0){
 	const char* ostime = "ostime";
 	
-	ESP8266_Send("1");
+	ESP8266_Send("1 \r\n");
 	char Rec[10];
 	ESP8266_Receive(Rec, 10);
 	UART_OutString("Received Time ");
@@ -387,8 +387,10 @@ if(strCmp(tokens[0], RPC_ST7735_Message)==0){
 		ctr++;
 		i++;
 	}
-	transmit_message[ctr]=0;
-	transmit_message[ctr]=0;
+	transmit_message[ctr++]=' ';
+	transmit_message[ctr++]='\r';
+	transmit_message[ctr++]='\n';
+	transmit_message[ctr++]=0;
 	ctr++;
 	ESP8266_Send(transmit_message);	
 	
@@ -411,8 +413,10 @@ if(strCmp(tokens[0], RPC_eFile_create)==0){
 		ctr++;
 		i++;
 	}
-	transmit_message[ctr]=0;
-	ctr++;
+	transmit_message[ctr++]=' ';
+	transmit_message[ctr++]='\r';
+	transmit_message[ctr++]='\n';
+	transmit_message[ctr++]=0;
 	ESP8266_Send(transmit_message);	
 	
 }
@@ -436,8 +440,10 @@ if(strCmp(tokens[0], RPC_eFile_write)==0){
 		ctr++;
 		i++;
 	}
-	transmit_message[ctr]=0;
-	ctr++;
+	transmit_message[ctr++]=' ';
+	transmit_message[ctr++]='\r';
+	transmit_message[ctr++]='\n';
+	transmit_message[ctr++]=0;
 	ESP8266_Send(transmit_message);
 }
 
@@ -462,8 +468,10 @@ if(strCmp(tokens[0], RPC_eFile_read)==0){
 		ctr++;
 		i++;
 	}
-	transmit_message[ctr]=0;
-	ctr++;
+	transmit_message[ctr++]=' ';
+	transmit_message[ctr++]='\r';
+	transmit_message[ctr++]='\n';
+	transmit_message[ctr++]=0;
 	ESP8266_Send(transmit_message);	
 }
 
@@ -552,7 +560,7 @@ void RPCConnectWifi(){
     OS_Kill();
   }
   ST7735_DrawString(0,1,"Wifi connected",ST7735_GREEN);
-   if(!ESP8266_MakeTCPConnection("api.openweathermap.org", 80, 0)){ // open socket to web server on port 80
+   if(!ESP8266_MakeTCPConnection("10.0.0.20", 1025, 0)){ // open socket to web server on port 80
     ST7735_DrawString(0,2,"Connection failed",ST7735_YELLOW); 
     //Running = 0;
     OS_Kill();
@@ -560,6 +568,7 @@ void RPCConnectWifi(){
   // Launch thread to fetch weather  
  // if(OS_AddThread(&SendRPC_Request,128,1)){}// NumCreated++;
   // Kill thread (should really loop to check and reconnect if necessary
+	OS_Kill();
 		while(1){
 			OS_Suspend();
 		
@@ -579,6 +588,8 @@ if(strCmp(tokens[0], RPC_ADC_IN)==0){
 	//const char* adc = "adcin";
 	char buffer[20];
 	uint32_t adc = ADC0_InSeq3();
+	buffer[7]='\r';
+	buffer[8]='\n';
 	ESP8266_Send(my_itoa(adc,buffer));   // here 10 means decimal
 	
 }
@@ -587,6 +598,8 @@ if(strCmp(tokens[0], RPC_OS_Time)==0){
 //	const char* ostime = "ostime";
 	char buffer[20];
 	uint32_t time = OS_Time();
+	buffer[7]='\r';
+	buffer[8]='\n';
 	ESP8266_Send(my_itoa(time,buffer));   // here 10 means decimal
 }
 
@@ -641,7 +654,10 @@ if(strCmp(tokens[0], RPC_eFile_read)==0){
 			UART_OutChar(ch[i]);
 			i++;
 		}
-		ch[i]=0;
+		ch[i++]='\r';
+		ch[i++]='\n';
+		ch[i++]=0;
+		
 		ESP8266_Send(ch);
 		eFile_RClose();
 
