@@ -18,3 +18,4 @@
 .\lab6.o: ../RTOS_Labs_common/eDisk.h
 .\lab6.o: ../RTOS_Labs_common/can0.h
 .\lab6.o: ../RTOS_Labs_common/esp8266.h
+.\lab6.o: ../inc/ADCSWTrigger.h

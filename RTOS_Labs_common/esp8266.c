@@ -53,6 +53,7 @@
 #include "../inc/tm4c123gh6pm.h"
 #include "../inc/CortexM.h"
 #include "../RTOS_Labs_common/FIFO.h"
+#include "../RTOS_Labs_common/OS.h"
 #include "../RTOS_Labs_common/UART0int.h"
 #include "../RTOS_Labs_common/esp8266.h"
 #include "../RTOS_Labs_common/WifiSettings.h"  // access point parameters
@@ -100,6 +101,9 @@ AddIndexFifo(ESP8266Rx0, FIFOSIZE, char, FIFOSUCCESS, FIFOFAIL)
 #ifndef USE_UART_DRV  
 AddIndexFifo(ESP8266Tx, FIFOSIZE, char, FIFOSUCCESS, FIFOFAIL)
 #endif
+
+Sema4Type ESPtx_sema;
+Sema4Type ESPrx_sema;
 
 // ESP8266 state
 uint16_t ESP8266_Server = 0;   // server port, if any   
@@ -309,6 +313,8 @@ void ESP8266_InitUART(int rx_echo, int tx_echo){ volatile int delay;
   ESP8266TxFifo_Init();
   ESP8266RxFifo_Init();
   ESP8266Rx0Fifo_Init();  
+	OS_InitSemaphore(&ESPrx_sema, 0);
+	OS_InitSemaphore(&ESPtx_sema, 0);
   ESP8266_EchoResponse = rx_echo;
   ESP8266_EchoCommand = tx_echo;
 #if ESP8266_UART==1
@@ -376,7 +382,9 @@ void ESP8266_DisableInterrupt(void){
 void static ESP8266BufferToTx(void){
   char letter;
   while(((UART_ESP8266(_FR_R)&UART_FR_TXFF) == 0) && (ESP8266TxFifo_Size() > 0)){
+		OS_Wait(&ESPtx_sema);
     ESP8266TxFifo_Get(&letter);
+		OS_Signal(&ESPtx_sema);
     if(ESP8266_EchoCommand){
       UART_OutCharNonBlock(letter); // echo
     }
@@ -396,7 +404,9 @@ void static ESP8266RxToBuffer(void){
       UART_OutCharNonBlock(letter); // echo
     }
     if(!ReceiveDataFilter(letter)) {
+			OS_Wait(&ESPrx_sema);
       ESP8266RxFifo_Put(letter);
+			OS_Signal(&ESPrx_sema);
     }
   }
 }

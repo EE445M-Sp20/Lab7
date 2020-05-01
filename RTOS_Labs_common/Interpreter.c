@@ -328,10 +328,16 @@ if(strCmp(tokens[0], DELETE_FILE)==0){
 	UART_OutString("\n\r");
 }
 
+
+
+
+// 	HERE STARTS THE SET OF RPC COMMANDS ON CLIENT SIDE
+// CLIENT SENDS A REQUEST BASED ON PROTOCOL USING ESP8266_Send AND BLOCKS TO RECEIVE
+//   ESP8266_Receive
 if(strCmp(tokens[0], RPC_ADC_IN)==0){
 	const char* adc = "adcin";
 	
-	ESP8266_Send("0 \r\n");
+	ESP8266_Send("0 \r\n");   
 	char Rec[10];
 	ESP8266_Receive(Rec, 10);
 	UART_OutString("Received ADC ");
@@ -442,7 +448,7 @@ if(strCmp(tokens[0], RPC_eFile_write)==0){
 		i++;
 	}
 	transmit_message[ctr++]=' ';
-	transmit_message[ctr++]='\r';
+	transmit_message[ctr++]='\r';   // Terminate each ESP message with \r\n
 	transmit_message[ctr++]='\n';
 	transmit_message[ctr++]=0;
 	ESP8266_Send(transmit_message);
@@ -555,7 +561,7 @@ void Interpreter(){
 
 // CLIENT SIDE RPC
 
-
+// CONNECT TO THE USING THE LOCAL IP ADDRESS AND ROUTE VIA TUNNEL
 void RPCConnectWifi(){
   // Initialize and bring up Wifi adapter  
 	ST7735_InitR(INITR_REDTAB);
@@ -580,18 +586,14 @@ void RPCConnectWifi(){
  // if(OS_AddThread(&SendRPC_Request,128,1)){}// NumCreated++;
   // Kill thread (should really loop to check and reconnect if necessary
 	OS_Kill();
-		while(1){
-			OS_Suspend();
-		
-		}
-  //OS_Kill(); 
 }  
 
 
 // SERVER SIDE RPC
 
 
-
+// Decode the message received from client and based on the protocol execute one of the following
+// tasks on the server launchpad.
 void decode_exec_rpc_server(char (*tokens)[MAXIMUM_COMMAND_WORD_LENGTH]){
 
 
@@ -602,7 +604,7 @@ if(strCmp(tokens[0], RPC_ADC_IN)==0){
 	uint32_t adc = ADC0_InSeq3();
 	buffer[3]='\r';
 	buffer[4]='\n';
-	ESP8266_Send(my_itoa(adc,buffer));   // here 10 means decimal
+	ESP8266_Send(my_itoa(adc,buffer));  
 	
 }
 
@@ -612,7 +614,7 @@ if(strCmp(tokens[0], RPC_OS_Time)==0){
 	uint32_t time = OS_Time();
 	buffer[7]='\r';
 	buffer[8]='\n';
-	ESP8266_Send(my_itoa(time,buffer));   // here 10 means decimal
+	ESP8266_Send(my_itoa(time,buffer));   
 }
 
 if(strCmp(tokens[0], RPC_ST7735_Message)==0){
@@ -741,6 +743,9 @@ if(strCmp(tokens[0], RPC_Toggle_led)==0){
 
 Sema4Type WebServerRPCSema;
 
+
+// launched when a new client connects. No two clients can be connected at same time. Receive the message
+// execute the request and kill thread.
 static void RPC_Server(){
 	char string[MAXIMUM_COMMAND_WORD_LENGTH];
 	ESP8266_Receive(string, 99);
@@ -752,6 +757,9 @@ static void RPC_Server(){
 	OS_Kill();	
 }
 
+
+// Server thread waits for client connection, unblocks and executes a thread to serve the requested message
+// New message repuest has to weait until the old message is processed
 void ServerRPC(void){
   // Initialize and bring up Wifi adapter 
 		OS_InitSemaphore(&WebServerRPCSema,0);

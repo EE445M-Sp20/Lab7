@@ -44,6 +44,7 @@
 #include "../RTOS_Labs_common/eDisk.h"
 #include "../RTOS_Labs_common/can0.h"
 #include "../RTOS_Labs_common/esp8266.h"
+#include "../inc/ADCSWTrigger.h"
 
 
 // CAN IDs are set dynamically at time of CAN0_Open
@@ -489,6 +490,9 @@ int Testmain3(void){   // Testmain3
   return 0;               // this never executes
 }
 
+
+// CONFIGURES AND LAUNCHES THE ESP MODULE AS A SERVER, LISTENS TO INCOMING REQUESTS
+// AND SERVES THE CLIENT BASED ON THE COMMANDS SENT
 int ServerTest(void){
   OS_Init();           // initialize, disable interrupts
   PortD_Init();
@@ -507,16 +511,17 @@ int ServerTest(void){
   return 0;               // this never executes
 }
 
+
+// CONFIGURES AND LAUNCHES THE ESP MODULE AS A CLIENT, AND BASED ON THE INTERPRETER COMMANDS, SENDS TO SERVER
+// THE DESIRFRED REQUEST AND RECEIVES BACK RESPONSES AS PER THE COMMAND
 int ClientTest(void){
   OS_Init();           // initialize, disable interrupts
   PortD_Init();
 	PLL_Init(Bus80MHz);
 	ST7735_InitR(INITR_REDTAB); // LCD initialization
-	LaunchPad_Init();
 	UART_Init();  
+	ADC0_InitSWTriggerSeq3_Ch9();
   OS_InitSemaphore(&WebServerSema,0);
-  
-  // create initial foreground threads
   NumCreated = 0 ;
   NumCreated += OS_AddThread(&Idle,128,3); 
   NumCreated += OS_AddThread(&RPCConnectWifi, 128,1); 

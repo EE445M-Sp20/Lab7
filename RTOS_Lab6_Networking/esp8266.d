@@ -7,6 +7,7 @@
 .\esp8266.o: ..\RTOS_Labs_common\../inc/tm4c123gh6pm.h
 .\esp8266.o: ..\RTOS_Labs_common\../inc/CortexM.h
 .\esp8266.o: ..\RTOS_Labs_common\../RTOS_Labs_common/FIFO.h
+.\esp8266.o: ..\RTOS_Labs_common\../RTOS_Labs_common/OS.h
 .\esp8266.o: ..\RTOS_Labs_common\../RTOS_Labs_common/UART0int.h
 .\esp8266.o: ..\RTOS_Labs_common\../RTOS_Labs_common/esp8266.h
 .\esp8266.o: ..\RTOS_Labs_common\../RTOS_Labs_common/WifiSettings.h
