@@ -23,10 +23,6 @@
 		IMPORT   Runptr
 		IMPORT   STACK
 		IMPORT   threads
-		;IMPORT   st1
-		;IMPORT   st2
-		IMPORT   Count1
-		IMPORT   Count2
 		IMPORT   Scheduler
 		IMPORT   EnableInterrupts
 		IMPORT   DisableInterrupts
