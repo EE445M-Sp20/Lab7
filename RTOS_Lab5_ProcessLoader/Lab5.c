@@ -119,7 +119,8 @@ void SW2Push(void){
 // inputs:  none
 // outputs: none
 void Idle(void){
-  IdleCount = 0;          
+  IdleCount = 0; 
+  PortD_Init();	
   while(1) {
     IdleCount++;
     PD0 ^= 0x01;
@@ -134,14 +135,16 @@ int realmain(void){ // realmain
   OS_Init();        // initialize, disable interrupts
   PortD_Init();     // debugging profile
   MaxJitter = 0;    // in 1us units
-	
+	PLL_Init(Bus80MHz);
   // hardware init
   ADC_Init(0);  // sequencer 3, channel 0, PE3, sampling in Interpreter
-
+  LaunchPad_Init();
+	
   Heap_Init();  // initialize heap
+	DataCollector_Init();
   
   // attach background tasks
-  OS_AddPeriodicThread(&disk_timerproc,TIME_1MS,0);   // time out routines for disk  
+  //OS_AddPeriodicThread(&disk_timerproc,TIME_1MS,0);   // time out routines for disk  
 	OS_AddPeriodicThread(&MicSampler,TIME_1MS/40,0);   // time out routines for disk 
 	OS_AddPeriodicThread(&HSRSampler,TIME_1MS*100,0);   // time out routines for disk 
 	OS_AddPeriodicThread(&GSRSampler,TIME_1MS*333,0);   // time out routines for disk 
@@ -150,10 +153,12 @@ int realmain(void){ // realmain
 
   // create initial foreground threads
   NumCreated = 0;
-  NumCreated += OS_AddThread(&Interpreter,128,2); 
+  //NumCreated += OS_AddThread(&Interpreter,128,2); 
   NumCreated += OS_AddThread(&Idle,128,5);  // at lowest priority 
-	NumCreated += OS_AddThread(&MainThread, 128, 1);
- 
+	NumCreated += OS_AddThread(&MicThread, 128, 1);
+	NumCreated += OS_AddThread(&HSRThread, 128, 1);
+	NumCreated += OS_AddThread(&GSRThread, 128, 1);
+  NumCreated += OS_AddThread(&ITFFT_Process, 128, 1);
   OS_Launch(TIME_2MS); // doesn't return, interrupts enabled in here
   return 0;            // this never executes
 }
