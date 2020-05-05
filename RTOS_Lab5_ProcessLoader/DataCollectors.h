@@ -1,5 +1,9 @@
 void MicSampler(void);
 void HSRSampler(void);
 void GSRSampler(void);
-void MainThread(void);
+void MicThread(void);
+void MicThread(void);
+void GSRThread(void);
+void HSRThread(void);
+void DataCollector_Init(void);
 void ITFFT_Process(void);

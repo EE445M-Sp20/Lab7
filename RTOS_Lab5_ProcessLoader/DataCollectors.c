@@ -16,17 +16,31 @@
 #include "../inc/ADCSWTrigger.h"
 #include "../inc/FIFO.h"
 
-#define FIFOSIZE    1024      // size of the FIFOs (must be power of 2)
+#define FIFOSIZE    32      // size of the FIFOs (must be power of 2)
 #define FIFOSUCCESS 1         // return value on success
 #define FIFOFAIL    0         // return value on failure
 
 Sema4Type MicSema;
+Sema4Type HSRSema;
+Sema4Type GSRSema;
 
-AddIndexFifo(Mic, FIFOSIZE, int, FIFOSUCCESS, FIFOFAIL)
+AddIndexFifo(Mic, 1024, int, FIFOSUCCESS, FIFOFAIL)   // These 3 FIFOs are for the original samples to be filtered
 
 AddIndexFifo(HRS, FIFOSIZE, int, FIFOSUCCESS, FIFOFAIL)
 	
 AddIndexFifo(GRS, FIFOSIZE, int, FIFOSUCCESS, FIFOFAIL)
+	
+AddIndexFifo(Mic_Proxy, 1024, int, FIFOSUCCESS, FIFOFAIL)  // These 3 FIFOs are the filtered samples to be sent over Blynk/ITFFT
+
+AddIndexFifo(HRS_Proxy, FIFOSIZE, int, FIFOSUCCESS, FIFOFAIL)
+	
+AddIndexFifo(GRS_Proxy, FIFOSIZE, int, FIFOSUCCESS, FIFOFAIL)
+
+void DataCollector_Init(void){
+	OS_InitSemaphore(&MicSema, 0);
+	OS_InitSemaphore(&HSRSema, 0);
+	OS_InitSemaphore(&GSRSema, 0);
+}
 
 void MicSampler(void){
 	ADC0_InitSWTriggerSeq3(0);
@@ -37,20 +51,58 @@ void MicSampler(void){
 	
 void HSRSampler(void){
 	ADC0_InitSWTriggerSeq3(1);
-	HRSFifo_Put(ADC0_InSeq3());
+	if(HRSFifo_Put(ADC0_InSeq3())==FIFOFAIL){
+		OS_Signal(&HSRSema);
+	}
 }
 	
 void GSRSampler(void){
 	ADC0_InitSWTriggerSeq3(2);
-	GRSFifo_Put(ADC0_InSeq3());
+	if(GRSFifo_Put(ADC0_InSeq3())==FIFOFAIL){
+		OS_Signal(&GSRSema);
+	}
 }
 
 
-void MainThread(){
+void MicThread(){
+	
+	while(1){
 	OS_Wait(&MicSema);
+	LPF_Init(0, 1024);
+	for(int i=0; i<1024; i++){
+		  int data;
+			LPF_Calc(MicFifo_Get(&data));
+		  Mic_ProxyFifo_Put(data);
+	}
+	}
 	// Invoke ITFFT Process and filtering?
 	
-	while(1){}
+	
+}
+
+void HSRThread(){
+	while(1){
+	OS_Wait(&HSRSema);
+	// Invoke ITFFT Process and filtering?
+	LPF_Init2(0, FIFOSIZE);
+	for(int i=0; i<FIFOSIZE; i++){
+		  int data;
+			LPF_Calc2(MicFifo_Get(&data));
+		  HRS_ProxyFifo_Put(data);
+	}
+}
+}
+
+void GSRThread(){
+	while(1){
+	OS_Wait(&GSRSema);
+	LPF_Init3(0, FIFOSIZE);
+	for(int i=0; i<FIFOSIZE; i++){
+		  int data;
+			LPF_Calc3(GRSFifo_Get(&data));
+		  GRS_ProxyFifo_Put(data);
+	}
+}
 }
 
 void ITFFT_Process(){
