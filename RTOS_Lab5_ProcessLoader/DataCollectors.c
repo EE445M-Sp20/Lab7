@@ -75,6 +75,7 @@ void MicThread(){
 		  int data;
 			LPF_Calc(MicFifo_Get(&data));
 		  Mic_ProxyFifo_Put(data);
+			SendInformation(data);
 	}
 	}
 	// Invoke ITFFT Process and filtering?
@@ -91,6 +92,7 @@ void HSRThread(){
 		  int data;
 			LPF_Calc2(MicFifo_Get(&data));
 		  HRS_ProxyFifo_Put(data);
+		  SendInformation(data);
 	}
 }
 }
@@ -103,6 +105,7 @@ void GSRThread(){
 		  int data;
 			LPF_Calc3(GRSFifo_Get(&data));
 		  GRS_ProxyFifo_Put(data);
+		  SendInformation(data);
 	}
 }
 }
