@@ -15,5 +15,7 @@
 .\datacollectors.o: ../RTOS_Labs_common/ST7735.h
 .\datacollectors.o: ../RTOS_Labs_common/eDisk.h
 .\datacollectors.o: ../RTOS_Labs_common/eFile.h
+.\datacollectors.o: esp8266.h
 .\datacollectors.o: ../inc/ADCSWTrigger.h
 .\datacollectors.o: ../inc/FIFO.h
+.\datacollectors.o: Blynk.h

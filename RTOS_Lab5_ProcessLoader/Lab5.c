@@ -142,6 +142,7 @@ int realmain(void){ // realmain
 	
   Heap_Init();  // initialize heap
 	DataCollector_Init();
+	ITFFT_Process();
   
   // attach background tasks
   //OS_AddPeriodicThread(&disk_timerproc,TIME_1MS,0);   // time out routines for disk  
@@ -158,7 +159,7 @@ int realmain(void){ // realmain
 	NumCreated += OS_AddThread(&MicThread, 128, 1);
 	NumCreated += OS_AddThread(&HSRThread, 128, 1);
 	NumCreated += OS_AddThread(&GSRThread, 128, 1);
-  NumCreated += OS_AddThread(&ITFFT_Process, 128, 1);
+  //NumCreated += OS_AddThread(&ITFFT_Process, 128, 1);
   OS_Launch(TIME_2MS); // doesn't return, interrupts enabled in here
   return 0;            // this never executes
 }

@@ -1,0 +1,12 @@
+.\blynk.o: ..\Lab4_Blynk_4C123\Blynk.c
+.\blynk.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\blynk.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\blynk.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\blynk.o: ..\inc/tm4c123gh6pm.h
+.\blynk.o: ..\Lab4_Blynk_4C123\ST7735.h
+.\blynk.o: ..\Lab4_Blynk_4C123\PLL.h
+.\blynk.o: ..\Lab4_Blynk_4C123\Timer2.h
+.\blynk.o: ..\Lab4_Blynk_4C123\Timer3.h
+.\blynk.o: ..\Lab4_Blynk_4C123\UART.h
+.\blynk.o: ..\Lab4_Blynk_4C123\PortF.h
+.\blynk.o: ..\Lab4_Blynk_4C123\esp8266.h

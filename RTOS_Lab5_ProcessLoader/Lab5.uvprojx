@@ -513,11 +513,6 @@
               <FilePath>..\inc\Timer5A.c</FilePath>
             </File>
             <File>
-              <FileName>esp8266.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS_Labs_common\esp8266.c</FilePath>
-            </File>
-            <File>
               <FileName>systick.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\RTOS_Labs_common\systick.s</FilePath>
@@ -531,6 +526,26 @@
               <FileName>DataCollectors.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\DataCollectors.h</FilePath>
+            </File>
+            <File>
+              <FileName>Blynk.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Blynk.h</FilePath>
+            </File>
+            <File>
+              <FileName>Blynk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Lab4_Blynk_4C123\Blynk.c</FilePath>
+            </File>
+            <File>
+              <FileName>esp8266.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Lab4_Blynk_4C123\esp8266.c</FilePath>
+            </File>
+            <File>
+              <FileName>esp8266.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Lab4_Blynk_4C123\esp8266.h</FilePath>
             </File>
           </Files>
         </Group>

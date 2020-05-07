@@ -13,8 +13,10 @@
 #include "../RTOS_Labs_common/ST7735.h"
 #include "../RTOS_Labs_common/eDisk.h"
 #include "../RTOS_Labs_common/eFile.h"
+#include "esp8266.h"
 #include "../inc/ADCSWTrigger.h"
 #include "../inc/FIFO.h"
+#include "Blynk.h"
 
 #define FIFOSIZE    32      // size of the FIFOs (must be power of 2)
 #define FIFOSUCCESS 1         // return value on success
@@ -106,4 +108,8 @@ void GSRThread(){
 }
 
 void ITFFT_Process(){
+	ESP8266_Init();       // Enable ESP8266 Serial Port
+  ESP8266_Reset();      // Reset the WiFi module
+  ESP8266_SetupWiFi();  // Setup communications to Blynk Server  
+
 }
