@@ -75,6 +75,7 @@ void MicThread(){
 		  int data;
 			LPF_Calc(MicFifo_Get(&data));
 		  Mic_ProxyFifo_Put(data);
+			SendInformation(data);
 	}
 	}
 	// Invoke ITFFT Process and filtering?
@@ -126,7 +127,7 @@ void GraphThread(){
 			//SendInformation(data);
 			UART_OutUDec(data);
 			UART_OutString("\n\r");
-	}
+}
 }
 }*/
 
@@ -169,6 +170,7 @@ void GSRThread(){
 		  int data;
 			LPF_Calc3(GRSFifo_Get(&data));
 		  GRS_ProxyFifo_Put(data);
+		  SendInformation(data);
 	}
 }
 }
