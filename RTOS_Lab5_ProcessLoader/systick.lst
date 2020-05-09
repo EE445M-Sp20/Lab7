@@ -321,17 +321,17 @@ ARM Macro Assembler    Page 5
               00000000 
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4 --apcs=interw
-ork --depend=.\systick.d -o.\systick.o -I.\RTE\_Lab5 -IC:\Users\prameen\AppData
-\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil_v5\ARM\CM
+ork --depend=.\systick.d -o.\systick.o -I.\RTE\_Lab5 -I"C:\Users\Blake A Gardne
+r\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123" -IC:\Keil
 
 
 
 ARM Macro Assembler    Page 6 
 
 
-SIS\Include --predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA
- 529" --predefine="_RTE_ SETA 1" --predefine="TM4C123GH6PM SETA 1" --list=.\sys
-tick.lst ..\RTOS_Labs_common\systick.s
+_v5\ARM\CMSIS\Include --predefine="__MICROLIB SETA 1" --predefine="__UVISION_VE
+RSION SETA 529" --predefine="_RTE_ SETA 1" --predefine="TM4C123GH6PM SETA 1" --
+list=.\systick.lst ..\RTOS_Labs_common\systick.s
 
 
 

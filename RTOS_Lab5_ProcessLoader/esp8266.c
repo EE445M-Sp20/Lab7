@@ -24,14 +24,16 @@
 #include <stdint.h>
 #include <string.h>
 #include "inc/tm4c123gh6pm.h"
-#include "UART.h"
-#include "ST7735.h"
+#include "../inc/UART.h"
+#include "../RTOS_Labs_common//ST7735.h"
 #include "esp8266.h"
 // the following two lines connect you to the internet
-char    ssid[32]        = "EE-IOT-Platform-03";
-char    pass[32]        = "dUQQE?&W44x7";
+
+char    ssid[32]        = "BLAKEAGARDNER";
+char    pass[32]        = "179/5Jw0";
+
 // create your own Blynk server app and edit this next line with your authentication code
-char    auth[64]        = "1234567890";
+char    auth[64]        = "M0FX-peBSisPmRkhDh_NIPEdT74IugGf";
 
 #define UART_FR_RXFF            0x00000040  // UART Receive FIFO Full
 #define UART_FR_TXFF            0x00000020  // UART Transmit FIFO Full

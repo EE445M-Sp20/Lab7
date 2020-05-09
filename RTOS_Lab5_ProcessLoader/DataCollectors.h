@@ -5,5 +5,6 @@ void MicThread(void);
 void MicThread(void);
 void GSRThread(void);
 void HSRThread(void);
+void GraphThread(void);
 void DataCollector_Init(void);
 void ITFFT_Process(void);

@@ -328,11 +328,25 @@ if(strCmp(tokens[0], DELETE_FILE)==0){
 	UART_OutString("\n\r");
 }
 
-
-
-
 }
 
+//delete file
+// ******** Interpreter ************
+// Reads in command from UART, tokenizes the arguments and decodes and executes them by matching
+// the commands to protocols
+// input:  None         
+// output: none
+void Interpreter(){
+	while(1){
+	char string[MAXIMUM_COMMAND_WORD_LENGTH];
+	UART_InString(string, 99);
+	char args[MAXIMUM_NUM_ARGUMENTS][MAXIMUM_COMMAND_WORD_LENGTH];
+	split(args, string);
+	decode_exec(args);
+	PF3 ^= 0x08;
+	OS_Suspend();
+	}
+}
 
 
 
